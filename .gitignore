@@ -1,0 +1,10 @@
+.idea
+database.sqlite
+node_modules
+ncp-debug.log
+npm-debug.log
+stats.json
+report.html
+
+build
+live

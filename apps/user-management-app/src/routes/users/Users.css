@@ -1,0 +1,19 @@
+
+.usersContainer{
+  margin-top: 50px;
+  margin-left: 50px;
+}
+
+.addRemoveUser :local{
+  position: relative;
+  top: -60px;
+  margin-right: 20px;
+  float: right;
+}
+
+.errorMessage :local{
+  display: block;
+  color: red;
+  text-align: center;
+  font-size: 12px;
+}
