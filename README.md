@@ -3,6 +3,10 @@
 A series of online React workshops are being hosted by [Mehran Hatami](https://github.com/mehranhatami)([fixjs](https://github.com/fixjs))
 and here you could find all the resources and codes used in this workshops.
 
+### Note:
+Recorded videos of all the sessions would be shared at my youtube channel: [JavaScript Mentor](http://bit.ly/JavaScriptMentor).
+You could find the playlist here: [React Workshops Playlist](https://www.youtube.com/playlist?list=PLinpyTbt1FwxTRKn089Wh1xeBQJMWoRhK).
+
 ## 1. A Step-By-Step Walkthrough Of Redux Data Flow
 
 Redux architecture revolves around a strict unidirectional data flow and in this workshop we are going to use redux-thunk to walk you through the step by step of the data flow.
