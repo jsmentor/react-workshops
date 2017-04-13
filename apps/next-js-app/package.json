@@ -1,0 +1,18 @@
+{
+  "name": "next-js-app",
+  "version": "1.0.0",
+  "description": "A sample next.js app",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "next": "^2.1.1",
+    "prop-types": "^15.5.8",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  }
+}
