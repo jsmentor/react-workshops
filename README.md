@@ -14,3 +14,7 @@ Redux architecture revolves around a strict unidirectional data flow and in this
 ## 2. Understanding the React Component State and Lifecycle
 
 React components have several "Lifecycle Methods" that you can override to run code at particular times in the process. We will cover every single step of the lifecycle by debugging and live coding. We will also cover how state works in every step.
+
+## 3. Middlewares And React Redux Life Cycle
+
+Middlewares are functions that are automatically called by the framework(Redux in our case) somewhere in the middle of the supposed control flow to enhance or change the output, before the end of the control flow.

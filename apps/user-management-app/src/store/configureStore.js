@@ -3,15 +3,20 @@ import thunk from 'redux-thunk';
 import rootReducer from '../reducers';
 import createHelpers from './createHelpers';
 import createLogger from './logger';
+import {beforeLoggerMiddleware, afterLoggerMiddleware} from './workshop-middleware';
 
 export default function configureStore(initialState, helpersConfig) {
   const helpers = createHelpers(helpersConfig);
-  const middleware = [thunk.withExtraArgument(helpers)];
+  const middlewares = [
+    thunk.withExtraArgument(helpers),
+    beforeLoggerMiddleware,
+    afterLoggerMiddleware,
+  ];
 
   let enhancer;
 
   if (__DEV__) {
-    middleware.push(createLogger());
+    middlewares.push(createLogger());
 
     // https://github.com/zalmoxisus/redux-devtools-extension#redux-devtools-extension
     let devToolsExtension = f => f;
@@ -20,11 +25,11 @@ export default function configureStore(initialState, helpersConfig) {
     }
 
     enhancer = compose(
-      applyMiddleware(...middleware),
+      applyMiddleware(...middlewares),
       devToolsExtension,
     );
   } else {
-    enhancer = applyMiddleware(...middleware);
+    enhancer = applyMiddleware(...middlewares);
   }
 
   // See https://github.com/rackt/redux/releases/tag/v3.1.0

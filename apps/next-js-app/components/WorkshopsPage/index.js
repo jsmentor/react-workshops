@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import mockEpisodes from '../../mock/episodes.json';
 
-const mockEpisodes2 = _.clone(mockEpisodes);
+const clonedMockEpisodes = _.clone(mockEpisodes);
 
 export default class WorkshopsPage extends React.Component {
   static defaultProps = {
@@ -14,7 +14,7 @@ export default class WorkshopsPage extends React.Component {
     super(props);
     console.info('Mounting 1. lifecycle method: constructor');
 
-   const {episodes = []} = props;
+    const {episodes = []} = props;
     this.state = {
       episodes
     };
@@ -26,7 +26,7 @@ export default class WorkshopsPage extends React.Component {
 
   loadEpisodes = () => {
     this.setState({
-      episodes: mockEpisodes
+      episodes: clonedMockEpisodes
     });
   };
 
@@ -65,7 +65,7 @@ export default class WorkshopsPage extends React.Component {
     const {title} = this.props;
     const {episodes = []} = this.state;
 
-    console.info('Mounting 3. lifecycle method: render');
+    // console.info('Mounting 3. lifecycle method: render');
     console.log('Updating 4. lifecycle method: render');
 
     return (

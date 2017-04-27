@@ -40,11 +40,34 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 //
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
+app.use((req, res, next) => {
+  console.log('01. middleware for a coming request.');
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res, next) => {
+  console.log('02. middleware for a coming request: before running cookieParser middleware:');
+  console.log('req.cookies : ', req.cookies);
+  next();
+});
 app.use(cookieParser());
+app.use((req, res, next) => {
+  console.log('03. middleware for a coming request: after running cookieParser middleware:');
+  console.log('req.cookies : ', req.cookies);
+  next();
+});
+app.use((req, res, next) => {
+  console.log('04. middleware for a coming request: before running bodyParser middleware:');
+  console.log('req.body : ', req.body);
+  next();
+});
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.use((req, res, next) => {
+  console.log('05. middleware for a coming request: after running bodyParser middleware:');
+  console.log('req.body : ', req.body);
+  next();
+});
 app.use('/apis', apis);
 
 //
