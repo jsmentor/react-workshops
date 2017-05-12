@@ -12,3 +12,4 @@ or if you think we better spend more on a specific topic.
 
 - [Universal JavaScript](https://medium.com/@mjackson/universal-javascript-4761051b7ae9)
 - [Isomorphic JavaScript: The Future of Web Apps](https://medium.com/airbnb-engineering/isomorphic-javascript-the-future-of-web-apps-10882b7a2ebc)
+- [Isomorphism vs Universal JavaScript](https://medium.com/@ghengeveld/isomorphism-vs-universal-javascript-4b47fb481beb)
