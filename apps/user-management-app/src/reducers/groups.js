@@ -23,6 +23,7 @@ const initialState = {
 
 export default createReducer(initialState, {
   [GET_USER_GROUPS_REQUEST]: (state, payload) => {
+    // the moment it reaches the reducer
     return {
       ...state,
       loading: true,

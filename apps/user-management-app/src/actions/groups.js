@@ -112,7 +112,10 @@ export function removeUserGroupsFailure(error) {
 
 export function loadUserGroups() {
   return async function (dispatch) {
-    dispatch(getUserGroupsRequest());
+    // dispatching an action
+    dispatch({
+      type: GET_USER_GROUPS_REQUEST,
+    });
     try {
       let list = await GroupsAPI.getUserGroups();
       dispatch(getUserGroupsSuccess(list));
