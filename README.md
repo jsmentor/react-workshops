@@ -18,3 +18,7 @@ React components have several "Lifecycle Methods" that you can override to run c
 ## 3. Middlewares And React Redux Life Cycle
 
 Middlewares are functions that are automatically called by the framework(Redux in our case) somewhere in the middle of the supposed control flow to enhance or change the output, before the end of the control flow.
+
+## 4. Universal React with Next.js - React on the Server
+
+We are going to first talk about the concept of "Universal JavaScript", then we'll discuss how to use React to implement a Universal App and eventually we'll set up a Universal React Application using [Next.js](https://github.com/zeit/next.js).
