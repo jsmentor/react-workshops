@@ -29,7 +29,7 @@ const initialState = {
 };
 
 export default createReducer(initialState, {
-  [GET_USERS_LIST_REQUEST]: (state, payload) => {
+  [GET_USERS_LIST_REQUEST]: (state) => {
     return {
       ...state,
       loading: true,

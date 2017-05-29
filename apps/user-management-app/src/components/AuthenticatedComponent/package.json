@@ -1,0 +1,7 @@
+{
+  "name": "authenticated-component",
+  "version": "1.0.0",
+  "description": "",
+  "main": "AuthenticatedComponent.js",
+  "author": "Mehran Hatami <mhatami@zoraq.com>"
+}

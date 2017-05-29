@@ -18,8 +18,7 @@ export default {
 
   path: '/users',
 
-  async action({store}) {
-    await loadUsersList(store);
+  action() {
     return {
       title,
       component: <Layout><Users title={title} /></Layout>,
