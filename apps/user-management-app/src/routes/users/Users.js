@@ -47,6 +47,14 @@ class Users extends React.Component {
     this.unassignSelectedUsersFromGroup = this.unassignSelectedUsersFromGroup.bind(this);
   }
 
+  loadUsersWithThunk = () =>{
+    this.props.actions.loadUsers();
+  };
+
+  loadUsers = () =>{
+    this.props.dispatch({type: 'GET_USERS_LIST_REQUEST'});
+  };
+
   createUser = async function () {
     const {newUser} = this.state;
     if (!newUser) {
@@ -55,7 +63,7 @@ class Users extends React.Component {
     await this.props.actions.createUser(newUser);
     if (this.props.created) {
       this.hideCreateUserDialog();
-      this.props.actions.loadUsers();
+      this.loadUsers();
     } else {
       this.setState({
         errorMessage: 'This user can not be created!'
@@ -76,7 +84,7 @@ class Users extends React.Component {
     await this.props.actions.removeSelectedUsers(selectedRows.filter((item) => !item.groups.length));
     if (this.props.removed) {
       this.hideRemoveConfirm();
-      this.props.actions.loadUsers();
+      oadUsers();
     } else {
       this.setState({
         removeError: 'One or more of these users can not be removed!'
@@ -128,7 +136,7 @@ class Users extends React.Component {
     await this.props.actions.assignSelectedUsers(selectedGroup, this.selectedUsers);
     if (this.props.assigned) {
       this.hideAssignUserDialog();
-      await this.props.actions.loadUsers();
+      this.loadUsers();
       await this.props.groupActions.loadUserGroups();
       await this.props.actions.loadGroupUsers(selectedGroup);
     } else {
@@ -144,7 +152,7 @@ class Users extends React.Component {
     await this.props.actions.unassignSelectedUsers(selectedGroup, selectedRows);
     if (this.props.unassigned) {
       this.hideRemoveConfirm();
-      await this.props.actions.loadUsers();
+      this.loadUsers();
       await this.props.groupActions.loadUserGroups();
       await this.props.actions.loadGroupUsers(selectedGroup);
     } else {
