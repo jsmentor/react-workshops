@@ -22,3 +22,7 @@ Middlewares are functions that are automatically called by the framework(Redux i
 ## 4. Universal React with Next.js - React on the Server
 
 We are going to first talk about the concept of "Universal JavaScript", then we'll discuss how to use React to implement a Universal App and eventually we'll set up a Universal React Application using [Next.js](https://github.com/zeit/next.js).
+
+## 5. ES6/ES2015 Function Generators and Redux-Saga
+
+Redux-Saga is a library that aims to make side effects (i.e. asynchronous things like data fetching and impure things like accessing the browser cache) in React/Redux applications easier and better.
