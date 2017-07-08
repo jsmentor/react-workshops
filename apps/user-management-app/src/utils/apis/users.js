@@ -1,6 +1,6 @@
 import fetch from '../../core/fetch';
 import {
-  getConfig, postConfig, removeConfig,
+  getConfig, postConfig, putConfig, removeConfig,
   USERS_API_PATH
 } from './conf';
 
@@ -22,6 +22,14 @@ export async function getUsers() {
 
 export async function createUser(newUser) {
   const resp = await fetch(USERS_API_PATH, postConfig(newUser));
+  if (resp.status !== 200) {
+    throw new Error(resp.statusText);
+  }
+  return resp.json();
+}
+
+export async function updateUser(newUser) {
+  const resp = await fetch(`${USERS_API_PATH}/${newUser._id}`, putConfig(newUser));
   if (resp.status !== 200) {
     throw new Error(resp.statusText);
   }

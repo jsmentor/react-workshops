@@ -4,6 +4,7 @@ import {getGroupUsersRequest, getGroupUsersSuccess, getGroupUsersFailure} from '
 import {
   GET_USERS_LIST_REQUEST, GET_USERS_LIST_SUCCESS, GET_USERS_LIST_FAILURE,
   CREATE_USER_REQUEST, CREATE_USER_SUCCESS, CREATE_USER_FAILURE,
+  UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE,
   REMOVE_USERS_REQUEST, REMOVE_USERS_SUCCESS, REMOVE_USERS_FAILURE,
   ASSIGN_USERS_REQUEST, ASSIGN_USERS_SUCCESS, ASSIGN_USERS_FAILURE,
   UNASSIGN_USERS_REQUEST, UNASSIGN_USERS_SUCCESS, UNASSIGN_USERS_FAILURE,
@@ -54,6 +55,33 @@ export function createUserSuccess(newUser) {
 export function createUserFailure(error) {
   return {
     type: CREATE_USER_FAILURE,
+    payload: {
+      error
+    }
+  }
+}
+
+export function updateUserRequest(updatedUser) {
+  return {
+    type: UPDATE_USER_REQUEST,
+    payload: {
+      updatedUser
+    }
+  };
+}
+
+export function updateUserSuccess(updatedUser) {
+  return {
+    type: UPDATE_USER_SUCCESS,
+    payload: {
+      updatedUser
+    }
+  };
+}
+
+export function updateUserFailure(error) {
+  return {
+    type: UPDATE_USER_FAILURE,
     payload: {
       error
     }
@@ -148,12 +176,24 @@ export function loadGroupUsers(name) {
 
 export function createUser(newUser) {
   return async function (dispatch) {
-    dispatch(createUserRequest(newUser));
     try {
-      let newGroup = await UsersAPI.createUser(newUser);
-      dispatch(createUserSuccess(newUser));
+      dispatch(createUserRequest(newUser));
+      const result = await UsersAPI.createUser(newUser);
+      dispatch(createUserSuccess(result));
     } catch (error) {
       dispatch(createUserFailure(error));
+    }
+  };
+}
+
+export function updateUser(newUser) {
+  return async function (dispatch) {
+    try {
+      dispatch(updateUserRequest(newUser));
+      const result = await UsersAPI.updateUser(newUser);
+      dispatch(updateUserSuccess(result));
+    } catch (error) {
+      dispatch(updateUserFailure(error));
     }
   };
 }

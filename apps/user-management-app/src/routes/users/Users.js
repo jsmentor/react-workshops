@@ -2,8 +2,8 @@ import React from 'react';
 import _ from 'lodash';
 import * as actionCreators from '../../actions/users';
 import * as groupActionsCreators from '../../actions/groups';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Users.css';
 import UsersDataTable from '../../components/UsersDataTable';
@@ -27,7 +27,7 @@ class Users extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    const {selectedGroup} = props;
+    const { selectedGroup } = props;
 
     this.state = {
       newUser: {
@@ -41,38 +41,39 @@ class Users extends React.Component {
       selectedGroup
     };
 
-    this.createUser = this.createUser.bind(this);
+    this.createOrUpdateUser = this.createOrUpdateUser.bind(this);
     this.removeSelectedUsers = this.removeSelectedUsers.bind(this);
     this.assignSelectedUsers = this.assignSelectedUsers.bind(this);
     this.unassignSelectedUsersFromGroup = this.unassignSelectedUsersFromGroup.bind(this);
   }
 
-  loadUsersWithThunk = () =>{
+  loadUsersWithThunk = () => {
     this.props.actions.loadUsers();
   };
 
-  loadUsers = () =>{
-    this.props.dispatch({type: 'GET_USERS_LIST_REQUEST'});
+  loadUsers = () => {
+    this.props.dispatch({ type: 'GET_USERS_LIST_REQUEST' });
   };
 
-  createUser = async function () {
-    const {newUser} = this.state;
+  createOrUpdateUser = async function () {
+    const { newUser } = this.state;
     if (!newUser) {
       return;
     }
-    await this.props.actions.createUser(newUser);
-    if (this.props.created) {
+    const action = newUser._id ? 'update' : 'create';
+    await this.props.actions[`${action}User`](newUser);
+    if (this.props.created || this.props.updated) {
       this.hideCreateUserDialog();
       this.loadUsers();
     } else {
       this.setState({
-        errorMessage: 'This user can not be created!'
+        errorMessage: `This user can not be ${action}d!`
       });
     }
   };
 
   removeSelectedUsers = async function () {
-    const {selectedGroup} = this.props;
+    const { selectedGroup } = this.props;
     if (selectedGroup) {
       return this.unassignSelectedUsersFromGroup();
     }
@@ -80,7 +81,7 @@ class Users extends React.Component {
   };
 
   removeUsers = async function () {
-    const {selectedRows} = this.state;
+    const { selectedRows } = this.state;
     await this.props.actions.removeSelectedUsers(selectedRows.filter((item) => !item.groups.length));
     if (this.props.removed) {
       this.hideRemoveConfirm();
@@ -93,7 +94,7 @@ class Users extends React.Component {
   };
 
   showUserDialog = () => {
-    const {selectedGroup} = this.props;
+    const { selectedGroup } = this.props;
     if (selectedGroup) {
       return this.showAssignUserDialog();
     }
@@ -105,6 +106,15 @@ class Users extends React.Component {
       showCreateUserDialog: true,
       newUser: {
         ...emptyUserInfo
+      },
+    });
+  };
+
+  showUpdateUserDialog = (userObject) => {
+    this.setState({
+      showCreateUserDialog: true,
+      newUser: {
+        ...userObject
       },
     });
   };
@@ -132,7 +142,7 @@ class Users extends React.Component {
   };
 
   assignSelectedUsers = async function () {
-    const {selectedGroup} = this.props;
+    const { selectedGroup } = this.props;
     await this.props.actions.assignSelectedUsers(selectedGroup, this.selectedUsers);
     if (this.props.assigned) {
       this.hideAssignUserDialog();
@@ -147,8 +157,8 @@ class Users extends React.Component {
   };
 
   unassignSelectedUsersFromGroup = async function () {
-    const {selectedRows} = this.state;
-    const {selectedGroup} = this.props;
+    const { selectedRows } = this.state;
+    const { selectedGroup } = this.props;
     await this.props.actions.unassignSelectedUsers(selectedGroup, selectedRows);
     if (this.props.unassigned) {
       this.hideRemoveConfirm();
@@ -195,7 +205,7 @@ class Users extends React.Component {
   };
 
   confirmMessage = () => {
-    const {selectedGroup} = this.props;
+    const { selectedGroup } = this.props;
     if (selectedGroup) {
       return `Are you sure you want to remove the selected users from ${selectedGroup}?`;
     }
@@ -203,15 +213,16 @@ class Users extends React.Component {
   };
 
   render() {
-    const {selectedGroup} = this.props;
-    const {list = [], loading, loaded, loadError} = this.props;
-    let {usersList = []} = this.props;
-    const {showCreateUserDialog, showAssignUserDialog, showRemoveConfirm, errorMessage, selectedRows = [], removeError, newUser = emptyUserInfo} = this.state;
+    const { selectedGroup } = this.props;
+    const { list = [], loading, loaded, loadError } = this.props;
+    let { usersList = [] } = this.props;
+    const { showCreateUserDialog, showAssignUserDialog, showRemoveConfirm, errorMessage, selectedRows = [], removeError, newUser = emptyUserInfo } = this.state;
     let usersCanBeRemoved;
+    let usersCanBeEdited = selectedRows.length ? selectedRows[0] : false;
 
     if (selectedGroup) {
       usersCanBeRemoved = selectedRows.length;
-      usersList = usersList.filter(({email}) => (!_.find(list, {email})));
+      usersList = usersList.filter(({ email }) => (!_.find(list, { email })));
     } else {
       usersCanBeRemoved = !!selectedRows.filter((item) => !item.groups.length).length;
     }
@@ -226,19 +237,31 @@ class Users extends React.Component {
           }
         </h1>
         <FABButton onClick={this.showUserDialog} className={s.addRemoveUser} ripple colored>
-          <Icon name="add"/>
+          <Icon name="add" />
         </FABButton>
+        {
+          usersCanBeEdited ?
+            (
+              <FABButton onClick={() => this.showUpdateUserDialog(usersCanBeEdited)} className={s.addRemoveUser} ripple colored>
+                <Icon name="edit" />
+              </FABButton>
+            ) :
+            null
+        }
         {
           usersCanBeRemoved ?
             (
               <FABButton onClick={this.showRemoveConfirm} className={s.addRemoveUser} ripple colored>
-                <Icon name="remove"/>
+                <Icon name="remove" />
               </FABButton>
             ) :
             null
         }
         {loaded &&
-        <UsersDataTable selectedGroup={selectedGroup} list={list} onSelectionChanged={this.onSelectionChanged}/> }
+        <UsersDataTable
+          selectedGroup={selectedGroup}
+          list={list}
+          onSelectionChanged={this.onSelectionChanged} /> }
         <Dialog open={showCreateUserDialog}>
           <DialogTitle>User Information</DialogTitle>
           <DialogContent>
@@ -269,7 +292,7 @@ class Users extends React.Component {
             {errorMessage && <span className={s.errorMessage}>{errorMessage}</span>}
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.createUser} type='button'>Save</Button>
+            <Button onClick={this.createOrUpdateUser} type='button'>Save</Button>
             <Button type='button' onClick={this.hideCreateUserDialog}>Cancel</Button>
           </DialogActions>
         </Dialog>
@@ -279,7 +302,7 @@ class Users extends React.Component {
             {
               usersList.length ?
                 (
-                  <UsersDataTable list={usersList} selectedRows={this.selectedUsers} mini={true}/>
+                  <UsersDataTable list={usersList} selectedRows={this.selectedUsers} mini={true} />
                 ) :
                 (
                   <span>All the users have been already assigned to {selectedGroup}!</span>
@@ -311,19 +334,19 @@ class Users extends React.Component {
   }
 }
 
-const mapStateToProps = (state, {selectedGroup}) => {
+const mapStateToProps = (state, { selectedGroup }) => {
   let groupUsers;
-  if(selectedGroup){
+  if (selectedGroup) {
     groupUsers = _.get(state, `groups.groupUsers[${selectedGroup}]`, {});
   }
   return {
     ...state.users,
     usersList: state.users.list,
     ...(selectedGroup ? {
-        list: groupUsers.list || [],
-        loading: !!groupUsers.loading,
-        loaded: !!groupUsers.loaded,
-      } : null)
+      list: groupUsers.list || [],
+      loading: !!groupUsers.loading,
+      loaded: !!groupUsers.loaded,
+    } : null)
   }
 };
 

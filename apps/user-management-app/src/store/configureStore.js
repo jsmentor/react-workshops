@@ -1,20 +1,25 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
+import { createEpicMiddleware } from 'redux-observable';
 import rootReducer from '../reducers';
 import createHelpers from './createHelpers';
 import createLogger from './logger';
 import {beforeLoggerMiddleware, afterLoggerMiddleware} from './workshop-middleware';
 import sagas from '../sagas';
+import epics from '../epics';
 
 export default function configureStore(initialState, helpersConfig) {
   const helpers = createHelpers(helpersConfig);
 
   const sagaMiddleware = createSagaMiddleware();
 
+  const epicMiddleware = createEpicMiddleware(epics);
+
   const middlewares = [
+    epicMiddleware,
     sagaMiddleware,
-    thunk.withExtraArgument(helpers),
+    thunk.withExtraArgument(helpers)
     // beforeLoggerMiddleware,
     // afterLoggerMiddleware,
   ];

@@ -2,6 +2,7 @@ import {createReducer} from '../utils';
 import {
   GET_USERS_LIST_REQUEST, GET_USERS_LIST_SUCCESS, GET_USERS_LIST_FAILURE,
   CREATE_USER_REQUEST, CREATE_USER_SUCCESS, CREATE_USER_FAILURE,
+  UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE,
   REMOVE_USERS_REQUEST, REMOVE_USERS_SUCCESS, REMOVE_USERS_FAILURE,
   ASSIGN_USERS_REQUEST, ASSIGN_USERS_SUCCESS, ASSIGN_USERS_FAILURE,
   UNASSIGN_USERS_REQUEST, UNASSIGN_USERS_SUCCESS, UNASSIGN_USERS_FAILURE,
@@ -15,6 +16,9 @@ const initialState = {
   isCreating: false,
   created: false,
   createError: false,
+  isUpdating: false,
+  updated: false,
+  updateError: false,
   isRemoving: false,
   removed: false,
   removeError: null,
@@ -72,9 +76,33 @@ export default createReducer(initialState, {
   [CREATE_USER_FAILURE]: (state, payload) => {
     return {
       ...state,
-      isRemoving: false,
-      removed: false,
+      isCreating: false,
+      created: false,
       createError: payload.error
+    };
+  },
+  [UPDATE_USER_REQUEST]: (state, payload) => {
+    return {
+      ...state,
+      isUpdating: true,
+      updated: false,
+      updatedUser: payload.updatedUser
+    };
+  },
+  [UPDATE_USER_SUCCESS]: (state, payload) => {
+    return {
+      ...state,
+      isUpdating: false,
+      updated: true,
+      updatedUser: payload.updatedUser
+    };
+  },
+  [UPDATE_USER_FAILURE]: (state, payload) => {
+    return {
+      ...state,
+      isUpdating: false,
+      updated: false,
+      updateError: payload.error
     };
   },
   [REMOVE_USERS_REQUEST]: (state, payload) => {

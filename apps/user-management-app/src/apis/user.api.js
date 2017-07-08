@@ -9,6 +9,7 @@
 
 import {notFound, invalidData} from './errors';
 import awaitify from 'awaitify';
+import _ from 'lodash';
 import {loadUserGroups} from './api-utils';
 import User from './models/user.model';
 
@@ -87,8 +88,20 @@ export const update = awaitify(function * (req, res, next) {
     if (!user) {
       return notFound(req, res);
     }
-    user.name = req.body.name;
-    const result = yield user.save();
+    const newUser = {};
+    if(_.has(req.body, 'email')){
+      newUser.email = req.body.email;
+    }
+    if (_.has(req.body, 'firstName')) {
+      newUser.firstName = req.body.firstName;
+    }
+    if (_.has(req.body, 'lastName')) {
+      newUser.lastName = req.body.lastName;
+    }
+    if (_.has(req.body, 'phoneNumber')) {
+      newUser.phoneNumber = req.body.phoneNumber;
+    }
+    const result = yield User.findByIdAndUpdate(req.params.id, { $set: newUser }, { new: true });
     res.status(200).json(result);
   } catch (err){
     return next(err);

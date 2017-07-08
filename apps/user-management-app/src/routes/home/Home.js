@@ -8,13 +8,19 @@
  */
 
 import React, { PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
 import Link from '../../components/Link';
 import { Grid, Cell, Card, CardTitle, CardText, CardActions, CardMenu, Button, IconButton } from 'react-mdl';
 import {connect} from 'react-redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Home.css';
+import * as actionCreators from '../../actions/ping';
 
 class Home extends React.Component {
+  ping = () => {
+    this.props.actions.ping();
+  };
+
   render() {
     const {groups, users} = this.props;
     return (
@@ -28,8 +34,9 @@ class Home extends React.Component {
                   There are {users.list.length} users in this system!
                 </CardText>
                 <CardActions border>
-                  <Button colored>
-                    <Link to="/users">Go to list</Link>
+                  <Button onClick={this.ping} colored>
+                    {/*<Link to="/users">Go to list</Link>*/}
+                    PING
                   </Button>
                 </CardActions>
               </Card>
@@ -56,9 +63,15 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    isPinging: state.ping.isPinging,
     groups: state.groups,
     users: state.users,
   }
 };
 
-export default connect(mapStateToProps)(withStyles(s)(Home));
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(actionCreators, dispatch),
+  dispatch,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(s)(Home));
