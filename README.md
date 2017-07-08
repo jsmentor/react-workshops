@@ -26,3 +26,7 @@ We are going to first talk about the concept of "Universal JavaScript", then we'
 ## 5. ES6/ES2015 Function Generators and Redux-Saga
 
 Redux-Saga is a library that aims to make side effects (i.e. asynchronous things like data fetching and impure things like accessing the browser cache) in React/Redux applications easier and better.
+
+## 6. Basics Of RxJS Observables (a preparation for redux-observable)
+
+In this session we cover basics of RxJS Observables to be prepared for the next session which is going to be about [redux-observable](https://redux-observable.js.org/), a redux middleware.

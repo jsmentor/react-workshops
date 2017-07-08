@@ -7,4 +7,3 @@ Now that we know what an `Observable` is we could start setting up `redux-observ
 ```bash
 npm install --save redux-observable
 ```
-
